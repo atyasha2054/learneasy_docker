@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-model = joblib.load('D:/flask website/Flask-Firebase-Template/static_xgboost_college_model.pkl')
+model = joblib.load('static_xgboost_college_model.pkl')
 
 
 app.secret_key = os.getenv('SECRET_KEY')
@@ -302,7 +302,7 @@ def predict():
         department = request.form['department']
 
         # Load the CSV file
-        seats_df = pd.read_csv('D:/flask website/Flask-Firebase-Template/College_Seats_Data (1).csv')
+        seats_df = pd.read_csv('College_Seats_Data (1).csv')
 
         # Filter for the selected college and department
         filtered_data = seats_df[(seats_df['College Name'] == college) & 
