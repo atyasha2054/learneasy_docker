@@ -1,0 +1,10 @@
+flask
+firebase_admin
+gunicorn
+python-dotenv
+pandas
+xgboost
+numpy
+scikit-learn
+joblib
+watchdog
