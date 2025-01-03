@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced Animated Card</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes popAndSpin {
+      0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.1) rotate(360deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideDown {
+      0% {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes burst {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+
+    .card {
+      animation: popAndSpin 1s ease-in-out;
+      display: none;
+    }
+
+    .card.show {
+      display: block;
+    }
+
+    .congrats {
+      animation: slideDown 1s ease-in-out;
+    }
+
+    .burst {
+      animation: burst 1s ease-out;
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+    }
+
+    .powered-by {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      color: #4A5568;
+      margin-top: 1.5rem;
+    }
+
+    .powered-by img {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white flex flex-col items-center justify-center min-h-screen relative">
+  <!-- Navbar -->
+  <nav class="w-full bg-white shadow-md py-4 px-6 text-gray-800 fixed top-0">
+  <div class="flex justify-between items-center max-w-6xl mx-auto">
+    <a href="#" class="text-xl font-extrabold text-gray-900 tracking-wide uppercase">Digi-Card</a>
+    <ul class="flex space-x-8 font-medium text-lg">
+      <li><a href="/" class="hover:text-purple-500 transition-colors">Home</a></li>
+      <li><a href="/books" class="hover:text-purple-500 transition-colors">Other Books</a></li>
+      <li><a href="#" class="hover:text-purple-500 transition-colors">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <!-- Spacer for fixed navbar -->
+  <div class="h-16"></div>
+
+  <!-- Congratulations Message -->
+  <div id="congratsMessage" class="congrats text-center hidden mb-8">
+    <h1 class="text-4xl font-bold">Congratulations!</h1>
+    <p class="text-xl mt-2">You got <span id="bookName" class="font-semibold">{{book.title}}</span></p>
+    <p class="text-lg mt-1">Happy Reading!</p>
+  </div>
+
+  <!-- Card Container -->
+  <div id="cardContainer" class="relative">
+    <div class="card bg-white rounded-lg shadow-lg p-4 w-80 transform transition-transform">
+      <!-- Card Image -->
+      <img
+        id="mainImage"
+        src="https://m.media-amazon.com/images/I/61Iz2yy2CKL.jpg"
+        alt="Card Main"
+        class="rounded-lg w-full h-48 object-cover"
+      />
+      <!-- QR Code -->
+      <div class="flex justify-center mt-4">
+        <img
+          id="qrCodeImage"
+          src="https://api.qrserver.com/v1/create-qr-code/?data=https://example.com&size=100x100"
+          alt="QR Code"
+          class="w-24 h-24"
+        />
+      </div>
+      <!-- Card Content -->
+      <div class="text-center mt-4">
+        <h2 class="text-lg font-bold text-gray-800" id="cardTitle">{{book.title}}</h2>
+        <p class="text-gray-500" id="cardSubtitle">Second Edition</p>
+      </div>
+      <!-- Powered By -->
+      <div class="text-center powered-by">
+        <img src="{{ url_for('static', filename='images/logo_final.jpeg') }}" alt="Google Sign-in" class="google-btn-logo">
+
+        Powered by <span class="font-semibold">LEARNEASY</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Show Card Button -->
+  <div id="showCardButton" class="bg-orange-500 text-white px-6 py-2 rounded-md shadow-lg hover:bg-orange-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+    Showing  Card
+  </div>
+
+  <script>
+    const bookData = {
+        mainImage: "{{ book.main_image_url }}",
+        qrCode: "{{ book.qr_code_url }}",
+        title: "{{ book.card_title }}",
+        subtitle: "{{ book.card_subtitle }}"
+      };
+    const cardContainer = document.getElementById("cardContainer");
+    const showCardButton = document.getElementById("showCardButton");
+    const congratsMessage = document.getElementById("congratsMessage");
+
+    // Countdown logic
+    let countdown = 3;
+    const interval = setInterval(() => {
+      showCardButton.textContent = `Show Card in ${countdown--}s`;
+      if (countdown < 0) {
+        clearInterval(interval);
+        triggerBurst();
+      }
+    }, 1000);
+
+    function triggerBurst() {
+      // Create burst animation
+      const burst = document.createElement("div");
+      burst.classList.add("burst");
+      document.body.appendChild(burst);
+
+      setTimeout(() => {
+        burst.remove(); // Remove burst animation after it completes
+        showCard();
+      }, 1000);
+    }
+
+    function showCard() {
+      showCardButton.classList.add("hidden");
+      const card = cardContainer.querySelector(".card");
+      card.classList.add("show");
+      congratsMessage.classList.remove("hidden");
+    }
+
+    // Function to dynamically change images and content
+    function updateCardContent(imageSrc, qrSrc, title, subtitle) {
+      document.getElementById("mainImage").src = imageSrc;
+      document.getElementById("qrCodeImage").src = qrSrc;
+      document.getElementById("cardTitle").textContent = title;
+      document.getElementById("cardSubtitle").textContent = subtitle;
+      document.getElementById("bookName").textContent = title;
+    }
+
+    // Example: Updating card dynamically
+    updateCardContent(bookData.mainImage, bookData.qrCode, bookData.title, bookData.subtitle);
+
+  </script>
+</body>
+</html>

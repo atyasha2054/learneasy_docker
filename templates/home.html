@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Flask Template</title>
+  </head>
+
+  <body>
+    class="font-montserrat bg-cover bg-center min-h-screen text-gray-100"
+    style="
+      background: linear-gradient(
+          to right,
+          rgba(2, 82, 89, 0.9),
+          rgba(255, 255, 255, 0)
+        ),
+        url('/static/images/bg.jpg');
+    "
+  >
+   
+
+    <main class="container mx-auto px-4 py-8">
+      <!-- Navigation Bar -->
+      <nav class="flex flex-wrap items-center justify-between mb-8">
+        <div class="flex items-center gap-4">
+          <img
+            src="{{ url_for('static', filename='images/logo_final.jpeg') }}"
+            alt="Logo"
+            class="w-16 h-16 rounded-full"
+          />
+        </div>
+        <div class="hidden md:flex items-center gap-4">
+          <div class="relative bg-white text-gray-700 rounded-full px-4 py-2 shadow-lg">
+            <input
+              type="text"
+              placeholder="Search"
+              class="bg-transparent focus:outline-none"
+            />
+            <span class="absolute top-1/2 right-3 -translate-y-1/2">
+              <i class="ri-search-line text-teal-700"></i>
+            </span>
+          </div>
+          <div>
+            <a
+              href="{{ url_for('login') }}"
+              class="flex items-center gap-2 px-4 py-2 bg-teal-700 text-white rounded-full shadow-md hover:bg-teal-800"
+            >
+              <i class="ri-user-3-fill bg-white text-teal-700 rounded-full p-1"></i>
+              Login
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Hero Section -->
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <!-- Hero Text -->
+        <div>
+          <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">
+            EXPLORE<br />
+            Digital Education<br />
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-teal-400">
+              PAPERLESS WITH US
+            </span>
+          </h1>
+          <p class="mt-4 text-gray-200 text-lg leading-relaxed">
+            Transforming education into a seamless, paperless experience! Our
+            innovative platform integrates streamlined counseling and
+            admissions, an intuitive code editor for skill-building, a smart
+            book card system with QR codes and token tracking, and advanced
+            handwritten notes digitization.
+          </p>
+          <button
+            class="mt-6 px-6 py-3 bg-teal-700 text-white rounded-full hover:bg-teal-800 transition-all duration-300 shadow-lg"
+          >
+            TRY OUR PRODUCTS NOW &rarr;
+          </button>
+        </div>
+
+        <!-- Hero Images -->
+        <div class="relative">
+          <img
+            src="{{ url_for('static', filename='images/bg-dots.png') }}"
+            alt="Dots"
+            class="absolute -top-10 -left-10 w-40 opacity-50"
+          />
+          <img
+            src="{{ url_for('static', filename='images/bg-arrow.png') }}"
+            alt="Arrow"
+            class="absolute -bottom-10 -right-10 w-40 opacity-50"
+          />
+        </div>
+      </div>
+
+      <!-- Destination Grid -->
+      <div class="grid md:grid-cols-3 gap-6 mt-16">
+        <!-- Card 1 -->
+        <div
+          class="bg-white text-gray-900 shadow-md rounded-lg transform hover:scale-105 transition-all duration-300"
+        >
+          <img
+            src="{{ url_for('static', filename='images/counselling.jpeg') }}"
+            alt="Counseling"
+            class="w-full rounded-t-lg"
+          />
+          <div class="p-4">
+            <h4 class="text-xl font-semibold">
+              Real-Time College Selection and Information
+            </h4>
+            <p class="text-sm mt-2 text-gray-600">
+              Enhance the college admissions process with a comprehensive, real-time system that includes dynamic seat matrix updates, real-time probability calculations for seat allocation, and an AI-powered chatbot. This tool provides instant, accurate, and personalized responses to queries.
+            </p>
+            <button
+            onclick="window.location.href='/form';"
+              class="mt-4 px-4 py-2 bg-teal-700 text-white rounded-full hover:bg-teal-800 transition-all duration-300"
+            >
+              PREDICT NOW
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div
+          class="bg-white text-gray-900 shadow-md rounded-lg transform hover:scale-105 transition-all duration-300"
+        >
+          <img
+            src="{{ url_for('static', filename='images/book_card.jpeg') }}"
+            alt="Book Card"
+            class="w-full rounded-t-lg"
+          />
+          <div class="p-4">
+            <h4 class="text-xl font-semibold">Empowering Digital Book Cards</h4>
+            <p class="text-sm mt-2 text-gray-600">
+              Streamline book management with QR-enabled digital book cards,
+              rewarding students with tokens and fostering informed decisions.
+            </p>
+            <button
+              onclick="window.location.href='/books';"
+              class="mt-4 px-4 py-2 bg-teal-700 text-white rounded-full hover:bg-teal-800 transition-all duration-300"
+            >
+              GRAB YOURS!
+            </button>
+          </div>
+        </div>
+
+
+         <!-- Card 3 -->
+        
+        
+
+        <!-- Card 4 -->
+        <div
+          class="bg-white text-gray-900 shadow-md rounded-lg transform hover:scale-105 transition-all duration-300"
+        >
+          <img
+            src="{{ url_for('static', filename='images/CodeEditor.jpeg') }}"
+            alt="Code Editor"
+            class="w-full rounded-t-lg"
+          />
+          <div class="p-4">
+            <h4 class="text-xl font-semibold">From Code to Creation</h4>
+            <p class="text-sm mt-2 text-gray-600">
+              Unlock expert tips, best practices, and powerful tools to enhance
+              your coding journey.
+            </p>
+            <button
+              class="mt-4 px-4 py-2 bg-teal-700 text-white rounded-full hover:bg-teal-800 transition-all duration-300"
+              onclick="window.location.href='/Code';"
+            >
+              TRY IT NOW!
+            </button>
+          </div>
+        </div>
+
+
+
+        <div
+        class="bg-white text-gray-900 shadow-md rounded-lg transform hover:scale-105 transition-all duration-300"
+      >
+        <img
+          src="{{ url_for('static', filename='images/autofill.jpg') }}"
+          alt="Book Card"
+          class="w-full rounded-t-lg"
+        />
+        <div class="p-4">
+          <h4 class="text-xl font-semibold">Effortless Admission with Automated Form Filling</h4>
+          <p class="text-sm mt-2 text-gray-600">
+           Automated form filling simplifies the admission process, ensuring accurate, efficient, and hassle-free collection of applicant details, saving time and reducing manual errors for institutions and students alike.
+          </p>
+          <button
+            onclick="window.location.href='/books';"
+            class="mt-4 px-4 py-2 bg-teal-700 text-white rounded-full hover:bg-teal-800 transition-all duration-300"
+          >
+            FILL IT WITHIN SECONDS!
+          </button>
+        </div>
+      </div>
+      </div>
+    </main>
+  </body>
+</html>

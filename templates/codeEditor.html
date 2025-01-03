@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Editor with Compilation</title>
+  
+  <!-- CodeMirror Styles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/theme/dracula.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-200 min-h-screen">
+
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6 text-center">Code Editor with Compilation</h1>
+    
+    <!-- Language Selector -->
+    <div class="mb-6">
+      <label for="language" class="block text-lg font-medium">Select Language</label>
+      <select id="language" class="w-full p-3 border rounded-md bg-gray-800 text-gray-200 border-gray-700">
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="c">C</option>
+        <option value="cpp">C++</option>
+        <option value="java">Java</option>
+        <option value="ruby">Ruby</option>
+      </select>
+    </div>
+
+    <!-- CodeMirror Editor -->
+    <div id="editor-container" class="mb-6 bg-gray-800 p-4 rounded-md">
+      <textarea id="code-editor"></textarea>
+    </div>
+
+    <!-- Question -->
+    <div id="question" class="p-4 bg-gray-800 shadow-md rounded mb-6">
+      <h2 class="text-lg font-semibold">Question:</h2>
+      <p id="question-text" class="text-gray-400"></p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-between items-center mb-6">
+      <button id="run-code" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">
+        Run Code
+      </button>
+      <button id="next-question" class="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded shadow">
+        Next Question
+      </button>
+    </div>
+
+    <!-- Output Area -->
+    <div id="output-area" class="p-4 bg-gray-800 shadow-md rounded">
+      <h2 class="text-lg font-semibold">Output:</h2>
+      <pre id="output-text" class="text-gray-400"></pre>
+      <h2 class="text-lg font-semibold mt-4">Result:</h2>
+      <p id="result" class="font-bold"></p>
+    </div>
+  </div>
+  <div class="flex justify-center mb-4">
+    <a href="{{ url_for('home') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded shadow-lg">
+      Home
+    </a>
+  </div>
+
+  <!-- CodeMirror and JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/lib/codemirror.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/javascript/javascript.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/python/python.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/clike/clike.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.13/mode/ruby/ruby.js"></script>
+  
+  <script>
+    // Initialize CodeMirror Editor
+    const editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+      lineNumbers: true,
+      mode: "python",
+      theme: "dracula",
+    });
+
+    // Predefined Questions and Expected Outputs
+    const questions = [
+      {
+        language: "python",
+        question: "Write a Python program to check if a given number is prime.",
+        expectedOutput: "True (if the number is prime) or False (if not prime)",
+      },
+      {
+        language: "python",
+        question: "Write a Python program to calculate the sum of 1 to 10.",
+        expectedOutput: "55",
+      },
+      {
+        language: "javascript",
+        question: "Write a JavaScript program to find the largest number in an array [3, 7, 2, 8, 5].",
+        expectedOutput: "8",
+      },
+      {
+        language: "javascript",
+        question: "Write a JavaScript function to calculate the factorial of 5.",
+        expectedOutput: "120",
+      },
+      {
+        language: "c",
+        question: "Write a C program to find the factorial of a given number.",
+        expectedOutput: "Factorial of the input number",
+      },
+      {
+        language: "cpp",
+        question: "Write a C++ program to calculate the sum of elements in an array [1, 2, 3, 4, 5].",
+        expectedOutput: "15",
+      },
+      {
+        language: "java",
+        question: "Write a Java program to find the Fibonacci series up to 10 terms.",
+        expectedOutput: "0, 1, 1, 2, 3, 5, 8, 13, 21, 34",
+      },
+      {
+        language: "java",
+        question: "Write a Java program to reverse a string 'OpenAI'.",
+        expectedOutput: "IAnepO",
+      },
+      {
+        language: "ruby",
+        question: "Write a Ruby program to check if a given string is a palindrome.",
+        expectedOutput: "True (if palindrome) or False (if not palindrome)",
+      },
+      {
+        language: "ruby",
+        question: "Write a Ruby program to find the sum of an array [1, 2, 3, 4, 5].",
+        expectedOutput: "15",
+      },
+    ];
+  
+    let currentQuestionIndex = 0;
+
+    // Display the current question
+    function displayQuestion(index) {
+      const question = questions[index];
+      document.getElementById("question-text").innerText = question.question;
+    }
+
+    displayQuestion(currentQuestionIndex);
+
+    // Language Selector Change Event
+    document.getElementById("language").addEventListener("change", (event) => {
+      const selectedLanguage = event.target.value;
+
+      // Change CodeMirror mode
+      const modeMap = {
+        python: "python",
+        javascript: "javascript",
+        c: "text/x-csrc",
+        cpp: "text/x-c++src",
+        java: "text/x-java",
+        ruby: "ruby",
+      };
+      editor.setOption("mode", modeMap[selectedLanguage]);
+
+      // Update question based on selected language
+      const languageQuestions = questions.filter((q) => q.language === selectedLanguage);
+      currentQuestionIndex = questions.indexOf(languageQuestions[0]);
+      displayQuestion(currentQuestionIndex);
+    });
+
+    // Run Code Button Event
+    document.getElementById("run-code").addEventListener("click", async () => {
+      const code = editor.getValue();
+      const language = document.getElementById("language").value;
+
+      const pistonLangMap = {
+        python: "python3",
+        javascript: "javascript",
+        c: "c",
+        cpp: "cpp",
+        java: "java",
+        ruby: "ruby",
+      };
+
+      const payload = {
+        language: pistonLangMap[language],
+        version: "*",
+        files: [{ content: code }],
+      };
+
+      try {
+        const response = await fetch("https://emkc.org/api/v2/piston/execute", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+        const output = result.run ? result.run.output.trim() : "Error running code";
+
+        document.getElementById("output-text").innerText = output;
+
+        const isCorrect = fuzzyMatch(output, questions[currentQuestionIndex].expectedOutput);
+        document.getElementById("result").innerText = isCorrect
+          ? "Correct Output!"
+          : "Incorrect Output. Try Again.";
+        document.getElementById("result").style.color = isCorrect ? "green" : "red";
+      } catch (error) {
+        document.getElementById("output-text").innerText = "Error: Unable to run code.";
+        console.error("Error:", error);
+      }
+    });
+
+    // Next Question Button Event
+    document.getElementById("next-question").addEventListener("click", () => {
+      currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+      displayQuestion(currentQuestionIndex);
+    });
+
+    function fuzzyMatch(actual, expected) {
+      return actual.trim() === expected.trim();
+    }
+  </script>
+  
+ 
+  <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2024/12/21/06/20241221065053-5MP98KDM.js"></script>
+      
+      
+</body>
+</html>

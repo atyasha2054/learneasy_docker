@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Admission Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-blue-200 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white shadow">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <a href="/" class="text-2xl font-bold flex items-center space-x-2">
+                
+                <span>Admission Predictor</span>
+            </a>
+            <ul class="flex space-x-6">
+                <li><a href="/" class="hover:underline text-lg">Home</a></li>
+                <li><a href="#about" class="hover:underline text-lg">About</a></li>
+                <li><a href="#contact" class="hover:underline text-lg">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Form Section -->
+    <div class="container mx-auto mt-12 max-w-2xl bg-white shadow-lg rounded-lg p-8">
+        <h1 class="text-4xl font-bold mb-6 text-center text-blue-700">Predict Your College Admission</h1>
+        <p class="text-gray-600 text-center mb-8">Provide your details below to calculate the probability of getting admitted.</p>
+        
+        <form action="/predict" method="post" class="space-y-8">
+            <div>
+                <label for="rank" class="block text-sm font-medium text-gray-700">Rank:</label>
+                <div class="relative flex items-center">
+                   
+                    <input type="number" id="rank" name="rank" min="1" required 
+                           class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 pl-12 py-3 text-lg">
+                </div>
+                <p class="text-sm text-gray-500 mt-2">Enter your rank (e.g., 1 for first rank).</p>
+            </div>
+
+            <div>
+                <label for="college" class="block text-sm font-medium text-gray-700">College Name:</label>
+                <div class="relative flex items-center">
+                    
+                    <input type="text" id="college" name="college" required 
+                           class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 pl-12 py-3 text-lg">
+                </div>
+            </div>
+
+            <div>
+                <label for="department" class="block text-sm font-medium text-gray-700">Department Name:</label>
+                <div class="relative flex items-center">
+                    
+                    <input type="text" id="department" name="department" required 
+                           class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 pl-12 py-3 text-lg">
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" 
+                        class="bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold py-3 px-8 rounded-md shadow-lg hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Predict Now
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto text-center py-6">
+            <p>&copy; 2024 Admission Predictor. All rights reserved.</p>
+            <p class="text-sm">Made with ❤️ by LEARNEASY</p>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2024/12/21/06/20241221065053-5MP98KDM.js"></script>
+    
+</body>
+</html>
